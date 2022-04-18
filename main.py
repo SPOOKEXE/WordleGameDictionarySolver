@@ -32,23 +32,26 @@ Blacklist = [
 
 from itertools import product
 from multiprocessing.dummy import Pool as ThreadPool
-
 import enchant
-d = enchant.Dict("en_US")
-
-permutationz = []
 
 base_word = "".join(CURRENT_WORD)
 total_dashes = str.count(base_word, "-")
-print(total_dashes)
+print("Missing Characters; ", total_dashes)
+
 character_products = list(product( avaiable_characters, repeat=total_dashes ))
+print("Total Mixes; ", len(character_products))
+
+dictionary_info = enchant.Dict("en_US")
 
 def checkPermutation( permutation_list ):
 	word = base_word
 	for val in list(permutation_list):
 		word = word.replace("-", val, 1)
-	if d.check(word):
+	if dictionary_info.check(word):
 		print(word)
 
 pool = ThreadPool(12)
 pool.map(checkPermutation, character_products)
+
+
+# potentially support https://numba.pydata.org/
